@@ -5,7 +5,7 @@ A simple PHP script to bulk-import Elementor templates (.json) directly into a W
 ## Project Structure
 
 ```
-elementor-bulk-importer/        # repository root
+elementor-bulk-importer/       # repository root
 ├── README.md                  # This file
 ├── elem-json/                 # Place all your .json Elementor exports here
 │   ├── alec.json
@@ -19,35 +19,39 @@ elementor-bulk-importer/        # repository root
 1. WordPress installed and Elementor active in your site.
 2. Administrator user with ID `1`.
 3. PHP 7.4+ with `file_get_contents` and `base64_encode` enabled.
-4. Place this repo under your WordPress root directory (where `wp-load.php` lives).
+4. Place this script (`elementor-import.php`) in your WordPress **root directory** (where `wp-load.php` is located).
 
 ## Setup
 
-1. Clone this repo into your WordPress root:
+1. Download the import script:
 
    ```bash
    cd /path/to/your/wordpress
-   wget [https://github.com/yourusername/elementor-bulk-importer.git](https://raw.githubusercontent.com/aliemamidev/Elementor-Bulk-Importer-by-PHP/main/elementor-import.php)
+   wget https://raw.githubusercontent.com/aliemamidev/Elementor-Bulk-Importer-by-PHP/main/elementor-import.php
    ```
-2. Navigate into the project:
+
+2. Create a folder named `elem-json` in the same root directory:
 
    ```bash
-   cd elementor-bulk-importer
+   mkdir elem-json
    ```
-3. Copy or export your Elementor templates into `elem-json/`:
+
+3. Place your Elementor `.json` export files into the `elem-json/` folder:
 
    ```bash
-   # Example: export from Elementor UI, then move
    mv ~/Downloads/my-template.json elem-json/
    ```
-4. Ensure `elem-json/` contains all your `.json` files.
 
 ## Usage
 
 ### Via Web Browser
 
-1. Make sure `elementor-import.php` is web-accessible at `https://your-domain.com/elementor-bulk-importer/elementor-import.php`.
-2. Visit that URL; you'll see plain-text import logs.
+1. Visit the script in your browser:
+
+   ```
+   https://your-domain.com/elementor-import.php
+   ```
+2. You’ll see import logs printed in plain text.
 
 ### Via CLI
 
@@ -94,4 +98,4 @@ foreach ( $files as $file ) {
 ## License
 
 MIT © SeyedAli Emami
-aliemamidev@gmail.com
+[aliemamidev@gmail.com](mailto:aliemamidev@gmail.com)
