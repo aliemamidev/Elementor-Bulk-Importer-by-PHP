@@ -1,2 +1,97 @@
-# Elementor-Bulk-Importer-by-PHP
-A simple PHP script to bulk-import Elementor templates (.json) directly into a WordPress
+# Elementor Bulk Importer
+
+A simple PHP script to bulk-import Elementor templates (.json) directly into a WordPress site using Elementor's internal API. Ideal for environments where WP-CLI is restricted (cPanel, Cloud hosting, etc.).
+
+## Project Structure
+
+```
+elementor-bulk-importer/        # repository root
+├── README.md                  # This file
+├── elem-json/                 # Place all your .json Elementor exports here
+│   ├── alec.json
+│   ├── emily.json
+│   └── ...
+└── elementor-import.php       # Main import script
+```
+
+## Prerequisites
+
+1. WordPress installed and Elementor active in your site.
+2. Administrator user with ID `1`.
+3. PHP 7.4+ with `file_get_contents` and `base64_encode` enabled.
+4. Place this repo under your WordPress root directory (where `wp-load.php` lives).
+
+## Setup
+
+1. Clone this repo into your WordPress root:
+
+   ```bash
+   cd /path/to/your/wordpress
+   wget [https://github.com/yourusername/elementor-bulk-importer.git](https://raw.githubusercontent.com/aliemamidev/Elementor-Bulk-Importer-by-PHP/main/elementor-import.php)
+   ```
+2. Navigate into the project:
+
+   ```bash
+   cd elementor-bulk-importer
+   ```
+3. Copy or export your Elementor templates into `elem-json/`:
+
+   ```bash
+   # Example: export from Elementor UI, then move
+   mv ~/Downloads/my-template.json elem-json/
+   ```
+4. Ensure `elem-json/` contains all your `.json` files.
+
+## Usage
+
+### Via Web Browser
+
+1. Make sure `elementor-import.php` is web-accessible at `https://your-domain.com/elementor-bulk-importer/elementor-import.php`.
+2. Visit that URL; you'll see plain-text import logs.
+
+### Via CLI
+
+Run:
+
+```bash
+php elementor-import.php
+```
+
+## Configuration Variables
+
+At the top of `elementor-import.php`, you can adjust:
+
+```php
+// Administrator user ID to impersonate during import
+$admin_user_id = 1;
+
+// Directory containing .json template files
+$templates_dir = __DIR__ . '/elem-json';
+```
+
+## elementor-import.php (simplified excerpt)
+
+```php
+<?php
+require_once __DIR__ . '/wp-load.php';
+// Impersonate Admin
+wp_set_current_user( $admin_user_id );
+
+$files = glob( $templates_dir . '/*.json' );
+foreach ( $files as $file ) {
+    $json = file_get_contents( $file );
+    $args = [ 'fileData' => base64_encode( $json ), 'fileName' => basename($file) ];
+    $result = \Elementor\Plugin::instance()->templates_manager->import_template( $args );
+    // ... log results
+}
+```
+
+## Security Considerations
+
+* **Delete or restrict** `elementor-import.php` after use to prevent unauthorized imports.
+* Ensure `elem-json/` is **not** web-accessible or contains only safe JSON files.
+
+## License
+
+MIT © SeyedAli Emami
+aliemamidev@gmail.com
